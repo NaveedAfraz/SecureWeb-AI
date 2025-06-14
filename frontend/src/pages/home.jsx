@@ -5,7 +5,7 @@ import { Search, ArrowRight, CheckCircle, Zap } from 'lucide-react'; // Added Za
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import UpcomingFeatures from './UpcomingFeatures.jsx';
-import FeaturesSection from './Features.jsx';
+import FeaturesSection from '../components/Features.jsx';
 import Footer from '@/components/footer.jsx';
 import Navbar from '@/components/navbar.jsx';
 

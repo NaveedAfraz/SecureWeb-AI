@@ -1,9 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router'
 import HomePage from './pages/home'
 import { useState } from 'react'
 import { useEffect } from 'react'
-import LoginPage from './components/login'
-import { ClerkProvider } from '@clerk/clerk-react'
+import LoginPage from './pages/login'
+import RegisterPage from './pages/register'
+import ProtectedRoute from './components/ProtectedRoute'
 function App() {
   const VITE_CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || "pk_test_aGFwcHktY2xhbS03Ni5jbGVyay5hY2NvdW50cy5kZXYk"
 
@@ -12,7 +13,7 @@ function App() {
   }
 
   const [token, setToken] = useState(localStorage.getItem('jwtToken'));
-  const [user, setUser] = useState(null); 
+  const [user, setUser] = useState(null);
 
   const decodeJwt = (token) => {
     try {
@@ -28,7 +29,6 @@ function App() {
     }
   };
 
- 
   useEffect(() => {
     const storedToken = localStorage.getItem('jwtToken');
     if (storedToken) {
@@ -44,18 +44,30 @@ function App() {
     }
   }, []);
 
-
   return (
-    <>
-      <ClerkProvider publishableKey={VITE_CLERK_PUBLISHABLE_KEY} afterSignOutUrl='/'>
-        <Router>
-          <Routes>
-            <Route path='/login' element={<LoginPage />} />
-            <Route path="/home" element={<HomePage />} />
-          </Routes>
-        </Router>
-      </ClerkProvider>
-    </>
+    <Router>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+
+        {/* Protected routes */}
+        <Route
+          path="/home"
+          element={
+            // <ProtectedRoute>
+            <HomePage />
+            
+          } 
+        />
+
+        {/* Default redirect */}
+
+
+        {/* Fallback for unknown routes */}
+        <Route path="*" element={<Navigate to="/home" replace />} />
+      </Routes>
+    </Router>
   )
 }
 export default App
