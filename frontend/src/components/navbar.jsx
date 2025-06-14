@@ -1,9 +1,12 @@
 import { Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
+import Footer from './footer';
 const Navbar = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     return (
+        <>
         <motion.nav
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -16,7 +19,7 @@ const Navbar = () => {
                         <Shield size={32} />
                         <span className="text-2xl font-bold text-foreground">SecureWeb AI</span>
                     </a>
-                    <div className="space-x-6">
+                    {location.pathname === "/input" ? null : <div className="space-x-6">
                         <a href="#features" className="text-foreground hover:text-primary transition-colors font-medium">
                             Features
                         </a>
@@ -31,10 +34,12 @@ const Navbar = () => {
                         >
                             Get Started
                         </motion.button>
-                    </div>
+                    </div>}
                 </div>
             </div>
         </motion.nav>
+       
+        </>
     );
 };
 

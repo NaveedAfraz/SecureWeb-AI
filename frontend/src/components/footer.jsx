@@ -8,11 +8,11 @@ const Footer = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.8 }}
-            className="bg-background border-t border-border py-12"
+            className="bg-background border-t border-border py-10"
         >
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 
                         flex flex-col sm:flex-row justify-between items-center text-center sm:text-left 
-                        space-y-6 sm:space-y-0"> {/* Added space-y for vertical spacing on small screens */}
+                        space-y-2 sm:space-y-0"> {/* Added space-y for vertical spacing on small screens */}
 
                 {/* Logo and Brand Name */}
                 <div className="flex flex-col items-center sm:items-start">
@@ -32,9 +32,6 @@ const Footer = () => {
                 <div className="flex flex-col items-center sm:items-end">
                     <p className="text-sm text-muted-foreground whitespace-nowrap">
                         &copy; {new Date().getFullYear()} SecureWeb AI. All rights reserved.
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-2 whitespace-nowrap">
-                        Built with love & AI by Lovable.
                     </p>
                 </div>
             </div>
