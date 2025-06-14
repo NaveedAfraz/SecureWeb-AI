@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import Navbar from '../components/navbar';
 import axios from 'axios';
+import Footer from '@/components/footer';
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -114,6 +115,7 @@ const LoginPage = () => {
                     </p>
                 </motion.div>
             </div>
+            <Footer />
         </>
     );
 };
