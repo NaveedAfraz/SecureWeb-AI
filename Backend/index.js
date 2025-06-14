@@ -3,34 +3,24 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import zapRoutes from "./routes/zap.js";
-<<<<<<< HEAD
 import connectDB from "./db/db.js";
-=======
->>>>>>> 3050aa4 (updated features)
 import zapReportRoutes from "./routes/zapReport.js";
 import authRoutes from "./routes/auth.js";
+import cookieParser from 'cookie-parser';
 dotenv.config();
 const app = express();
-<<<<<<< HEAD
 connectDB();
-app.use(cors());
-app.use(express.json());
-app.use("/api/auth", authRoutes);
-app.use("/api/zap", zapRoutes);
-  
-=======
-
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://localhost:5174"], // allow both ports
     credentials: true,
   })
 );
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/zap", zapRoutes);
->>>>>>> 3050aa4 (updated features)
 app.use("/api/zap", zapReportRoutes);
+app.use(cookieParser());
 
 app.get("/", (req, res) => res.send("Server is running!"));
 

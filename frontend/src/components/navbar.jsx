@@ -46,8 +46,19 @@ const Navbar = () => {
                                     onClick={() => navigate('/login')}
                                     className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md font-semibold hover:bg-accent hover:text-accent-foreground transition-colors"
                                 >
-                                    Get Started
+                                    Login
                                 </motion.button>
+
+
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => navigate('/register')}
+                                    className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md font-semibold hover:bg-accent hover:text-accent-foreground transition-colors"
+                                >
+                                    Signup
+                                </motion.button>
+                                
                             </div>
                         )}
                     </div>

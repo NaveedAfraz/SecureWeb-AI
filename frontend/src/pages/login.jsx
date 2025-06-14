@@ -11,33 +11,39 @@ const LoginPage = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3006";
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(username, password);
+        setError('');
 
         try {
-            const response = await axios.post(`${API_URL}/api/login`, {
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password }),
-            }, {
-                withCredentials: true,
-            });
+            const response = await axios.post(
+                `${API_URL}/api/auth/login`,
+                { username, password }, // 👈 Correct payload
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true,
+                }
+            );
 
             if (response.status === 200) {
-                // localStorage.setItem('jwtToken', data.token);
-                //setToken(data.token);
-                //setUser(decodeJwt(data.token)); // Set user from decoded token
-                navigate('/home'); // Redirect on success
-                return { success: true };
-            }
-            else {
-                return { success: false, message: response.data.message || 'Login failed.' };
+                const { token } = response.data;
+
+                // Save token to localStorage
+                localStorage.setItem('jwtToken', token);
+
+                // Optional: decode token and set user state if you need
+                // setUser(decodeJwt(token)); 
+                navigate('/home');
+            } else {
+                setError(response.data.message || 'Login failed');
             }
         } catch (error) {
             console.error('Login error:', error);
-            return { success: false, message: 'Network error or server unavailable.' };
+            setError('Network error or server unavailable.');
         }
     };
+
 
     const handleLogout = () => {
         localStorage.removeItem('jwtToken');
@@ -55,7 +61,6 @@ const LoginPage = () => {
 
     return (
         <>
-
             <Navbar />
             <div className="flex items-center justify-center h-[100vh] overflow-hidden bg-gradient-to-br from-purple-500 to-indigo-600 p-4">
                 <motion.div

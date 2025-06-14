@@ -17,6 +17,25 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem('jwtToken'));
   const [user, setUser] = useState(null);
 
+  // App.jsx or useAuth.js
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/api/auth/check`, {
+          withCredentials: true
+        });
+        console.log("User authenticated:", res.data.user);
+        setUser(res.data.user); // Optional: Save user to state/context
+      } catch (err) {
+        console.log("Not logged in or session expired");
+        setUser(null);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+
   const decodeJwt = (token) => {
     try {
       const base64Url = token.split('.')[1];
@@ -54,26 +73,26 @@ function App() {
   }, [location.pathname])
 
   return (
-      <Routes>
-        {/* Public routes */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/input" element={<Input />} />
-        {/* Protected routes */}
-        <Route
-          path="/home"
-          element={
-            // <ProtectedRoute>
-            <HomePage />
+    <Routes>
+      {/* Public routes */}
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/input" element={<Input />} />
+      {/* Protected routes */}
+      <Route
+        path="/home"
+        element={
+          // <ProtectedRoute>
+          <HomePage />
 
-          }
-        />
+        }
+      />
 
-        {/* Default redirect */}
+      {/* Default redirect */}
 
 
-        {/* Fallback for unknown routes */}
-      </Routes>
+      {/* Fallback for unknown routes */}
+    </Routes>
 
   )
 }

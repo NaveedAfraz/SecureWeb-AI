@@ -13,28 +13,19 @@ const RegisterPage = () => {
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setMessage('');
 
         try {
-            // const response = await axios.post(`${API_URL}/api/register`, {
-            //     method: 'POST',
-            //     body: JSON.stringify({ username, password }),
-            // }, {
-            //     withCredentials: true
-            // });
-            const response = await axios.post(`${API_URL}/api/register`, {
-                username,
-                password
-            }, {
-                withCredentials: true
-            });
+            const response = await axios.post(
+                `${API_URL}/api/auth/register`,
+                { username, password }, // ✅ body directly
+                { withCredentials: true } // ✅ only in options
+            );
 
-
-            const data = await response.json();
+            const data =response.data;
 
             if (response.ok) {
                 setMessage(data.message || 'Registration successful! Redirecting to login...');
