@@ -20,13 +20,19 @@ const RegisterPage = () => {
         setMessage('');
 
         try {
+            // const response = await axios.post(`${API_URL}/api/register`, {
+            //     method: 'POST',
+            //     body: JSON.stringify({ username, password }),
+            // }, {
+            //     withCredentials: true
+            // });
             const response = await axios.post(`${API_URL}/api/register`, {
-                method: 'POST',
-
-                body: JSON.stringify({ username, password }),
+                username,
+                password
             }, {
                 withCredentials: true
             });
+
 
             const data = await response.json();
 

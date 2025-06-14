@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router'
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router'
 import HomePage from './pages/home'
 import { useState } from 'react'
 import { useEffect } from 'react'
@@ -46,8 +46,14 @@ function App() {
     }
   }, []);
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (location.pathname == "/") {
+      navigate("/home")
+    }
+  }, [location.pathname])
+
   return (
-    <Router>
       <Routes>
         {/* Public routes */}
         <Route path="/login" element={<LoginPage />} />
@@ -59,17 +65,16 @@ function App() {
           element={
             // <ProtectedRoute>
             <HomePage />
-            
-          } 
+
+          }
         />
 
         {/* Default redirect */}
 
 
         {/* Fallback for unknown routes */}
-        <Route path="*" element={<Navigate to="/input" replace />} />
       </Routes>
-    </Router>
+
   )
 }
 export default App

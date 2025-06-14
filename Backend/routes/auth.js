@@ -1,7 +1,7 @@
-import express from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
+import express from "express";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -16,7 +16,7 @@ const users = []; // Use MongoDB in future
     id: "user1",
     username: "testuser",
     passwordHash,
-    roles: ["user"]
+    roles: ["user"],
   });
 })();
 
@@ -35,15 +35,21 @@ export const authenticateToken = (req, res, next) => {
 
 // Register
 router.post("/register", async (req, res) => {
+  console.log("Received register:", req.body);
   const { username, password } = req.body;
   if (!username || !password)
     return res.status(400).json({ message: "All fields required" });
 
-  if (users.find(u => u.username === username))
+  if (users.find((u) => u.username === username))
     return res.status(409).json({ message: "User already exists" });
 
   const passwordHash = await bcrypt.hash(password, 10);
-  users.push({ id: Date.now().toString(), username, passwordHash, roles: ["user"] });
+  users.push({
+    id: Date.now().toString(),
+    username,
+    passwordHash,
+    roles: ["user"],
+  });
 
   res.status(201).json({ message: "User registered successfully!" });
 });
@@ -51,7 +57,7 @@ router.post("/register", async (req, res) => {
 // Login
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  const user = users.find(u => u.username === username);
+  const user = users.find((u) => u.username === username);
   if (!user || !(await bcrypt.compare(password, user.passwordHash)))
     return res.status(401).json({ message: "Invalid credentials" });
 
