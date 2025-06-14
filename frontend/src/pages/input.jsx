@@ -54,40 +54,6 @@ const Input = () => {
 
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-    // const handleScan = async (e) => {
-    //     e.preventDefault();
-    //     if (!url) return;
-    //     setIsLoading(true);
-    //     setResults([]);
-    //     setScanMessage('');
-    //     try {
-    //         const token = localStorage.getItem("jwtToken"); // If login is protected
-    //         // const response = await axios.post(`${API_URL}/api/zap/report`,
-    //         //     { url },
-    //         //     {
-    //         //         headers: {
-    //         //             Authorization: `Bearer ${token}`
-    //         //         },
-    //         //         withCredentials: true
-    //         //     }
-    //         // );
-
-    //         // console.log("🔍 Scan result:", response.data);
-    //         // Optional: Navigate or show results on screen
-
-    //         const { message, data } = response.data;
-    //         setResults(data); // array of vulnerabilities
-    //         setScanMessage(message || "Scan complete.");
-
-    //         // alert("Scan Complete ✅. See console for results.");
-    //     } catch (err) {
-    //         console.error("❌ Scan error:", err.response?.data || err.message);
-    //         alert("Error during scan: " + (err.response?.data?.error || err.message));
-    //     } finally {
-    //         setIsLoading(false);
-    //         setUrl('');
-    //     }
-    // };
 
     const handleScan = async (e) => {
         e.preventDefault();
