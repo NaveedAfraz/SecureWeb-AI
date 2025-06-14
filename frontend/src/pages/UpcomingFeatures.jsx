@@ -1,84 +1,92 @@
-import { Shield, BrainCircuit, Zap, LockKeyhole, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Lightbulb, Rocket, BarChartBig } from 'lucide-react';
 
-const features = [
+const upcomingFeaturesList = [
   {
-    icon: <LockKeyhole className="h-12 w-12 text-primary mb-4" />,
-    title: 'Comprehensive Scan',
-    description: 'Detects a wide range of vulnerabilities, from insecure password storage to misconfigured headers.',
+    icon: <Lightbulb className="h-8 w-8 text-primary mb-3" />,
+    title: 'AI-Driven Remediation Suggestions',
+    description: 'Get smart, actionable advice on how to fix identified vulnerabilities directly within your reports.',
   },
   {
-    icon: <BrainCircuit className="h-12 w-12 text-primary mb-4" />,
-    title: 'Gemini AI Analysis',
-    description: 'Leverages advanced AI to provide deeper insights and contextual understanding of potential threats.',
+    icon: <Rocket className="h-8 w-8 text-primary mb-3" />,
+    title: 'Continuous Monitoring & Alerts',
+    description: 'Set up automated scans and receive real-time alerts for new threats on your configured websites.',
   },
   {
-    icon: <Zap className="h-12 w-12 text-primary mb-4" />,
-    title: 'Zapier Integration',
-    description: 'Automate your security workflows by connecting our analysis results to your favorite apps via Zapier.',
-  },
-  {
-    icon: <FileText className="h-12 w-12 text-primary mb-4" />,
-    title: 'Actionable Reports',
-    description: 'Receive clear, easy-to-understand reports with prioritized recommendations to fix issues quickly.',
+    icon: <BarChartBig className="h-8 w-8 text-primary mb-3" />,
+    title: 'Advanced Dashboard Analytics',
+    description: 'Visualize your security posture over time with enhanced charts and trend analysis.',
   },
 ];
 
 const cardVariants = {
-  initial: { opacity: 0, y: 50 },
-  animate: (i) => ({
+  initial: { opacity: 0, y: 30, scale: 0.95 },
+  animate: (i) => ({ // Removed ': number' type annotation
     opacity: 1,
     y: 0,
+    scale: 1,
     transition: {
-      delay: i * 0.15,
+      delay: i * 0.2,
       duration: 0.5,
-      ease: [0.22, 1, 0.36, 1] 
-    }
-  })    
+      ease: [0.22, 1, 0.36, 1], // Kept as array, assuming framer-motion handles it
+    },
+  }),
+  hover: {
+    scale: 1.05,
+    boxShadow: "0px 10px 20px rgba(var(--primary-rgb), 0.1)", 
+    transition: { duration: 0.3, ease: "easeOut" } // Kept as string
+  }
 };
+
 
 const UpcomingFeatures = () => {
   return (
-    <section id="features" className="py-20 bg-card">
+    <motion.div
+      className="py-16 bg-card/50"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, delay: 1.2 }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y:20 }}
-          whileInView={{ opacity: 1, y:0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        <motion.h3
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-3xl font-bold text-center text-foreground mb-3"
         >
-          <h2 className="text-4xl font-bold text-center text-foreground mb-4">
-            Why Choose <span className="text-primary">SecureWeb AI</span>?
-          </h2>
-          <p className="text-xl text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
-            Our platform provides cutting-edge tools and insights to keep your web applications secure and resilient against threats.
-          </p>
-        </motion.div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((feature, index) => (
+          What's <span className="text-primary">Coming Soon</span>?
+        </motion.h3>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="text-lg text-center text-muted-foreground mb-12 max-w-xl mx-auto"
+        >
+          We're constantly innovating to bring you the most advanced security tools.
+        </motion.p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {upcomingFeaturesList.map((feature, index) => (
             <motion.div
               key={feature.title}
               custom={index}
               variants={cardVariants}
               initial="initial"
               whileInView="animate"
-              viewport={{ once: true, amount: 0.2 }}
-              className="bg-background p-8 rounded-xl shadow-lg hover:shadow-primary/20 transition-shadow duration-300 flex flex-col items-center text-center group" // Added 'group' class
+              whileHover="hover"
+              viewport={{ once: true, amount: 0.3 }}
+              className="bg-background p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center text-center"
             >
-              <motion.div
-                className="inline-block" // Added for transform-origin if needed, and to isolate motion
-                whileHover={{ scale: 1.15, rotate: 5 }} // Icon animation on card hover
-                transition={{ type: "spring", stiffness: 300, damping: 10 }}
-              >
-                {feature.icon}
-              </motion.div>
-              <h3 className="text-2xl font-semibold text-foreground mb-3 mt-2">{feature.title}</h3> 
-              <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+              {feature.icon}
+              <h4 className="text-xl font-semibold text-foreground mb-2">{feature.title}</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
             </motion.div>
           ))}
         </div>
       </div>
-    </section>
+    </motion.div>
   );
 };
 
