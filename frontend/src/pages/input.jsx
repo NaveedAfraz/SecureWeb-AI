@@ -1,0 +1,166 @@
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { CircularProgress } from '@mui/material';
+import ShieldOutlinedIcon from '@mui/icons-material/ShieldOutlined';
+import HttpOutlinedIcon from '@mui/icons-material/HttpOutlined';
+import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
+// Animated background component
+const AnimatedGradientBackground = () => (
+    <div className="absolute inset-0 -z-10 overflow-hidden bg-gray-900">
+        <motion.div
+            className="absolute h-[50rem] w-[50rem] bg-gradient-to-r from-indigo-500/40 via-purple-500/30 to-pink-500/40"
+            style={{ borderRadius: '50%' }}
+            animate={{
+                x: ['-20%', '20%', '-20%'],
+                y: ['-20%', '20%', '-20%'],
+                rotate: [0, 180, 360],
+                scale: [1, 1.2, 1],
+            }}
+            transition={{
+                duration: 30,
+                ease: "easeInOut",
+                repeat: Infinity,
+                repeatType: "mirror",
+            }}
+        />
+    </div>
+);
+
+// Feature card component
+const FeatureCard = ({ icon, title, delay }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: delay }}
+        className="p-4 bg-white/5 rounded-lg border border-white/10 flex items-center gap-3"
+    >
+        {icon}
+        <span className="text-gray-300">{title}</span>
+    </motion.div>
+);
+
+
+const Home = () => {
+    const [url, setUrl] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleScan = (e) => {
+        e.preventDefault();
+        if (!url) return;
+        setIsLoading(true);
+
+        // Simulate API call
+        setTimeout(() => {
+            // In a real app, you would navigate to a results page
+            // or show results here. We'll just reset for this demo.
+            console.log(`Scanning ${url}...`);
+            setIsLoading(false);
+            setUrl('');
+        }, 3000);
+    };
+
+    const title = "Guard Your Digital Fortress";
+
+    const titleVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.08,
+            },
+        },
+    };
+
+    const letterVariant = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 },
+    };
+
+    return (
+        <div className="relative min-h-screen w-full flex flex-col items-center justify-center p-4 overflow-hidden font-sans text-white">
+            <AnimatedGradientBackground />
+            <AnimatePresence>
+                {isLoading ? (
+                    <motion.div
+                        key="loader"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        className="flex flex-col items-center gap-4"
+                    >
+                        <CircularProgress color="inherit" />
+                        <p className="text-lg text-gray-300">Initiating Scan on <span className="font-semibold text-white">{url}</span>...</p>
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        key="content"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.5 }}
+                        className="w-full max-w-2xl flex flex-col items-center text-center"
+                    >
+                        {/* --- Headline --- */}
+                        <motion.h1
+                            variants={titleVariants}
+                            initial="hidden"
+                            animate="visible"
+                            className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4"
+                        >
+                            {title.split("").map((char, index) => (
+                                <motion.span key={index} variants={letterVariant}>
+                                    {char}
+                                </motion.span>
+                            ))}
+                        </motion.h1>
+
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 1.2, duration: 0.5 }}
+                            className="text-lg text-gray-300 mb-8 max-w-xl"
+                        >
+                            Uncover vulnerabilities in SSL, HTTP headers, and script security before attackers do.
+                        </motion.p>
+
+                        {/* --- Input Form --- */}
+                        <motion.form
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 1.5, duration: 0.5 }}
+                            onSubmit={handleScan}
+                            className="w-full flex"
+                        >
+                            <input
+                                type="text"
+                                value={url}
+                                onChange={(e) => setUrl(e.target.value)}
+                                placeholder="https://your-website.com"
+                                className="flex-grow p-4 bg-white/10 text-white rounded-l-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                            />
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                type="submit"
+                                className="p-4 bg-indigo-600 rounded-r-md flex items-center justify-center"
+                            >
+                                <ArrowForwardIcon />
+                            </motion.button>
+                        </motion.form>
+
+                        {/* --- Feature Highlights --- */}
+                        <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-xl">
+                            <FeatureCard icon={<ShieldOutlinedIcon className="text-indigo-400" />} title="SSL Analysis" delay={1.8} />
+                            <FeatureCard icon={<HttpOutlinedIcon className="text-indigo-400" />} title="Header Checks" delay={1.9} />
+                            <FeatureCard icon={<VpnKeyOutlinedIcon className="text-indigo-400" />} title="Script Auditing" delay={2.0} />
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+};
+
+export default Home;
