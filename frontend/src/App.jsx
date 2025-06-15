@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import LoginPage from './pages/login'
 import RegisterPage from './pages/register'
 import ProtectedRoute from './components/ProtectedRoute'
-import Input from './pages/input'
+import Scan from './pages/scan'
 
 function App() {
   const VITE_CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || "pk_test_aGFwcHktY2xhbS03Ni5jbGVyay5hY2NvdW50cy5kZXYk"
@@ -77,7 +77,7 @@ function App() {
       {/* Public routes */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/input" element={<Input />} />
+      <Route path="/input" element={<Scan />} />
       {/* Protected routes */}
       <Route
         path="/home"

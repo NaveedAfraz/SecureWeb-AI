@@ -46,7 +46,7 @@ const FeatureCard = ({ icon, title, delay }) => (
 );
 
 
-const Input = () => {
+const Scan = () => {
     const [url, setUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [results, setResults] = useState([]);           // ✅ moved inside
@@ -185,25 +185,17 @@ const Input = () => {
                                 <FeatureCard icon={<HttpOutlinedIcon className="text-indigo-400" />} title="Header Checks" delay={1.9} />
                                 <FeatureCard icon={<VpnKeyOutlinedIcon className="text-indigo-400" />} title="Script Auditing" delay={2.0} />
                             </div>
-                            {
-                                results.length > 0 && (
-                                    <div className="mt-12 w-full max-w-4xl text-left bg-white/10 p-6 rounded-lg border border-white/20">
-                                        <h3 className="text-xl font-bold mb-4 text-white">🔍 Vulnerability Report</h3>
-                                        <p className="text-green-400 mb-4">{scanMessage}</p>
-                                        <ul className="space-y-4">
-                                            {results.map((item, index) => (
-                                                <li key={index} className="bg-white/5 p-4 rounded-lg border border-white/20">
-                                                    <p className="text-indigo-300 font-semibold">⚠️ {item.alert || item.name}</p>
-                                                    <p className="text-gray-200 text-sm mt-1">Risk: {item.risk || item.riskdesc}</p>
-                                                    <p className="text-gray-300 text-sm mt-2">
-                                                        <strong>Explanation:</strong> {item.explanation || "No explanation available."}
-                                                    </p>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                )
-                            }
+
+                            {results.map((item, index) => (
+                                <li key={index} className="bg-white/5 p-4 rounded-lg border border-white/20">
+                                    <p className="text-indigo-300 font-semibold">⚠️ {item.alert}</p>
+                                    <p className="text-gray-200 text-sm mt-1">Risk: {item.risk}</p>
+                                    <p className="text-gray-300 text-sm mt-2">
+                                        <strong>Explanation:</strong> {item.explanation}
+                                    </p>
+                                </li>
+                            ))}
+
 
                         </motion.div>
                     )}
@@ -215,4 +207,4 @@ const Input = () => {
     );
 };
 
-export default Input;
+export default Scan;

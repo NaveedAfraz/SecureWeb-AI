@@ -8,6 +8,8 @@ import UpcomingFeatures from './UpcomingFeatures.jsx';
 import FeaturesSection from '../components/Features.jsx';
 import Footer from '@/components/footer.jsx';
 import Navbar from '@/components/navbar.jsx';
+import Scan from './scan.jsx';
+import { useNavigate } from 'react-router';
 
 const fadeInUp = {
     initial: { opacity: 0, y: 30 },
@@ -47,6 +49,7 @@ const analysisItems = [
 ];
 
 const Home = () => {
+    const navigate = useNavigate();
     const [url, setUrl] = useState('');
     const handleAnalyze = () => {
         if (!url.trim()) {
@@ -175,7 +178,14 @@ const Home = () => {
                     >
 
                     </motion.div>
-
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => navigate('/input')}
+                        className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md font-semibold hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
+                        Get Started
+                    </motion.button>
                     <motion.div
                         variants={fadeInUp}
                         initial="initial"

@@ -32,8 +32,7 @@ const LoginPage = () => {
                 // Save token to localStorage
                 localStorage.setItem('jwtToken', token);
 
-                // Optional: decode token and set user state if you need
-                // setUser(decodeJwt(token)); 
+
                 navigate('/home');
             } else {
                 setError(response.data.message || 'Login failed');
