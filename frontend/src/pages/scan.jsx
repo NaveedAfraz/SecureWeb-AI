@@ -53,7 +53,7 @@ const Scan = () => {
     const [results, setResults] = useState([]);
     const [scanMessage, setScanMessage] = useState("");
 
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const API_URL = import.meta.env.VITE_API_URL || 'https://secureweb-ai.onrender.com';
 
 
     const handleScan = async (e) => {
