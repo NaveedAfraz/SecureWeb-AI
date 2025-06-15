@@ -6,13 +6,17 @@ import zapRoutes from "./routes/zap.js";
 import connectDB from "./db/db.js";
 import zapReportRoutes from "./routes/zapReport.js";
 import authRoutes from "./routes/auth.js";
-import cookieParser from 'cookie-parser';
+import cookieParser from "cookie-parser";
 dotenv.config();
 const app = express();
 connectDB();
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"], // allow both ports
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://secure-web-ai.vercel.app",
+    ], // allow both ports
     credentials: true,
   })
 );
