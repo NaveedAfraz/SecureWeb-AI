@@ -3,8 +3,9 @@
    "version": "1.0.0",
    "type": "module",
    "scripts": {
-     "start": "node index.js"
-   },
+      "build": "echo no build step needed",
+      "start": "node index.js"
+    }, 
    "dependencies": {
      "@ai-sdk/google": "^1.2.19",
      "@google/generative-ai": "^0.24.1",
