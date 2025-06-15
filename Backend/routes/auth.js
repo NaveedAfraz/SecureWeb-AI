@@ -58,18 +58,17 @@ router.post("/login", async (req, res) => {
       JWT_SECRET,
       { expiresIn: "1h" }
     );
-    res.cookie("token", token, {
+   return res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "Lax",
       maxAge: 3600000, // 1 hour
-    });
-
-    return res.status(200).json({ message: "Login successful!", token, username: user.username });
+    }).status(200).json({ message: "Login successful!", token, username: user.username });
   } catch (err) {
     console.error("Login error:", err);
     return res.status(500).json({ message: "Server error during login." });
   }
+
 });
 
 router.get("/check", (req, res) => {

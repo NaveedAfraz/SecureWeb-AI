@@ -20,7 +20,7 @@ router.post("/report", authenticateToken, async (req, res) => {
   try {
     // 🕷️ Step 1: Spider the target
     const spiderRes = await axios.get(`${ZAP_API}/JSON/spider/action/scan/`, {
-      params: { url, apikey: ZAP_API_KEY }
+      params: { url, apikey: ZAP_API_KEY },
     });
 
     const spiderScanId = spiderRes.data.scan;
@@ -41,7 +41,7 @@ router.post("/report", authenticateToken, async (req, res) => {
 
     // 🛡️ Step 2: Active Scan
     const scanRes = await axios.get(`${ZAP_API}/JSON/ascan/action/scan/`, {
-      params: { url, apikey: ZAP_API_KEY }
+      params: { url, apikey: ZAP_API_KEY },
     });
 
     const scanId = scanRes.data.scan;
@@ -62,26 +62,47 @@ router.post("/report", authenticateToken, async (req, res) => {
 
     // 🧠 Step 3: Get alerts
     const alertsRes = await axios.get(`${ZAP_API}/JSON/core/view/alerts/`, {
-      params: { baseurl: url, apikey: ZAP_API_KEY }
+      params: { baseurl: url, apikey: ZAP_API_KEY },
     });
 
     const alerts = alertsRes.data.alerts || [];
 
-    // 🧠 Step 4: Explain via LLM
-    const explained = await Promise.all(alerts.map(async (vuln) => {
-      try {
-        const explanation = await explainVulnerability(vuln);
-        return { ...vuln, explanation };
-      } catch (err) {
-        return { ...vuln, explanation: "Error explaining vulnerability." };
-      }
-    }));
+    const explained = await Promise.all(
+      alerts.map(async (v) => {
+        try {
+          const raw = await explainVulnerability(v);
+          const explanation = formatExplanation(raw);
+          return { ...v, explanation };
+        } catch (err) {
+          return { ...v, explanation: "Error explaining vulnerability." };
+        }
+      })
+    );
 
-    return res.json({ message: "Scan & explanation complete", data: explained });
+    return res.json({
+      message: "Scan & explanation complete",
+      data: explained,
+    });
   } catch (err) {
     console.error("ZAP report error:", err.message);
-    return res.status(500).json({ error: "Internal error during report generation." });
+    return res
+      .status(500)
+      .json({ error: "Internal error during report generation." });
   }
 });
 
+function formatExplanation(text) {
+  if (!text) return "";
+
+  // Remove Markdown symbols like asterisks, headers
+  let cleaned = text.replace(/[*#`]/g, "");
+  cleaned = cleaned.replace(/\n+/g, " ").trim();
+
+  // Shorten the explanation (e.g., to 300 characters)
+  if (cleaned.length > 500) {
+    cleaned = cleaned.slice(0, 500) + "...";
+  }
+
+  return cleaned;
+}
 export default router;

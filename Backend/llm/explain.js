@@ -12,9 +12,10 @@ Description: ${vuln.desc}
 Risk Level: ${vuln.riskdesc}
 
 Explain:
-1. What is the vulnerability?
+1. What is the vulnerability ?
 2. Why is it dangerous?
 3. How can it be fixed?
+4.EVERY RESPONSE FOR THE ABOVE QUESTION SHOULD BE IN 2 LINES.
 `;
 
   try {
