@@ -19,7 +19,7 @@ const Navbar = () => {
     };
 
     useEffect(() => {
-        const id = localStorage.getItem("userId");
+        const id = localStorage.getItem("token");
         if (id) setUserId(id);
     }, []);
 
