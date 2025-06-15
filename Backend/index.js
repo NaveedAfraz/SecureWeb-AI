@@ -14,7 +14,7 @@ connectDB();
 //   origin: 'https://secure-web-ai.vercel.app',
 //   credentials: true,       
 // }));
-
+app.use(cookieParser());
 const corsOptions = {
   origin: 'https://secure-web-ai.vercel.app', // Your frontend URL
   credentials: true, // Allows cookies and authorization headers
@@ -22,11 +22,12 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'], // Explicitly allow headers
 };
 app.options('*', cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/zap", zapRoutes);
 app.use("/api/zap", zapReportRoutes);
-app.use(cookieParser());
+
 
 app.get("/", (req, res) => res.send("Server is running!"));
 
