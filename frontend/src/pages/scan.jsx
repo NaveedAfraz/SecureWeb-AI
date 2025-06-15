@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // MODIFICATION: Added useEffect
 import { motion, AnimatePresence } from 'framer-motion';
 import { CircularProgress } from '@mui/material';
 import ShieldOutlinedIcon from '@mui/icons-material/ShieldOutlined';
@@ -9,12 +9,13 @@ import Navbar from '@/components/navbar';
 import { useLocation } from 'react-router-dom';
 import Footer from '@/components/footer';
 import axios from 'axios';
-// Animated background component
 
+// Animated background component
 const AnimatedGradientBackground = () => (
-    <div className="absolute inset-0 -z-10 overflow-hidden bg-gray-900">
+    // MODIFICATION: Reduced z-index to -20 and lowered opacity of gradients (e.g., /40 -> /20)
+    <div className="absolute inset-0 -z-20 overflow-hidden bg-gray-900">
         <motion.div
-            className="absolute h-[50rem] w-[50rem] bg-gradient-to-r from-indigo-500/40 via-purple-500/30 to-pink-500/40"
+            className="absolute h-[50rem] w-[50rem] bg-gradient-to-r from-indigo-500/20 via-purple-500/15 to-pink-500/20"
             style={{ borderRadius: '50%' }}
             animate={{
                 x: ['-20%', '20%', '-20%'],
@@ -49,10 +50,39 @@ const FeatureCard = ({ icon, title, delay }) => (
 const Scan = () => {
     const [url, setUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [results, setResults] = useState([]);           // ✅ moved inside
+    const [results, setResults] = useState([]);
     const [scanMessage, setScanMessage] = useState("");
+    // MODIFICATION: New state for dynamic loading messages
+    const [loadingMessage, setLoadingMessage] = useState('');
 
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+    // MODIFICATION: Dummy loading steps
+    const loadingSteps = [
+        "Warming up the scanners...",
+        "Checking SSL/TLS configuration...",
+        "Analyzing HTTP security headers...",
+        "Auditing for insecure scripts...",
+        "Compiling vulnerability report...",
+        "Almost there, finalizing results..."
+    ];
+
+    // MODIFICATION: Effect to cycle through dummy loading messages every 2 seconds
+    useEffect(() => {
+        let interval;
+        if (isLoading) {
+            let stepIndex = 0;
+            // Set the first message immediately
+            setLoadingMessage(loadingSteps[stepIndex]);
+
+            interval = setInterval(() => {
+                stepIndex = (stepIndex + 1) % loadingSteps.length;
+                setLoadingMessage(loadingSteps[stepIndex]);
+            }, 2000); // Update every 2 seconds
+        }
+        // Cleanup function to clear the interval when loading is finished
+        return () => clearInterval(interval);
+    }, [isLoading]);
 
 
     const handleScan = async (e) => {
@@ -76,14 +106,14 @@ const Scan = () => {
             );
 
             const { message, data } = response.data;
-            setResults(data); // array of vulnerabilities
+            setResults(data || []); // Ensure data is an array
             setScanMessage(message || "Scan complete.");
         } catch (err) {
             console.error("❌ Scan error:", err.response?.data || err.message);
-            alert("Error during scan: " + (err.response?.data?.error || err.message));
+            setScanMessage("Error during scan: " + (err.response?.data?.error || err.message));
         } finally {
             setIsLoading(false);
-            setUrl('');
+            // setUrl(''); // You might want to keep the URL in the input
         }
     };
 
@@ -110,17 +140,30 @@ const Scan = () => {
             <Navbar />
             <div className="relative min-h-screen w-full flex flex-col items-center justify-center p-4 overflow-hidden font-sans text-white">
                 <AnimatedGradientBackground />
-                <AnimatePresence>
+                <AnimatePresence mode="wait">
                     {isLoading ? (
                         <motion.div
                             key="loader"
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.8 }}
-                            className="flex flex-col items-center gap-4"
+                            className="flex flex-col items-center gap-4 text-center"
                         >
                             <CircularProgress color="inherit" />
-                            <p className="text-lg text-gray-300">Initiating Scan on <span className="font-semibold text-white">{url}</span>...</p>
+                            <p className="text-lg text-gray-300">Initiating Scan on <span className="font-semibold text-white">{url}</span></p>
+                            {/* MODIFICATION: Display the dynamic loading message */}
+                            <AnimatePresence mode="wait">
+                                <motion.p
+                                    key={loadingMessage}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="text-md text-gray-400"
+                                >
+                                    {loadingMessage}
+                                </motion.p>
+                            </AnimatePresence>
                         </motion.div>
                     ) : (
                         <motion.div
@@ -129,14 +172,14 @@ const Scan = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.5 }}
-                            className="w-full max-w-2xl flex flex-col items-center text-center"
+                            className="w-full max-w-4xl flex flex-col items-center" // Increased max-width for results
                         >
                             {/* --- Headline --- */}
                             <motion.h1
                                 variants={titleVariants}
                                 initial="hidden"
                                 animate="visible"
-                                className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4"
+                                className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 text-center"
                             >
                                 {title.split("").map((char, index) => (
                                     <motion.span key={index} variants={letterVariant}>
@@ -149,7 +192,7 @@ const Scan = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 1.2, duration: 0.5 }}
-                                className="text-lg text-gray-300 mb-8 max-w-xl"
+                                className="text-lg text-gray-300 mb-8 max-w-xl text-center"
                             >
                                 Uncover vulnerabilities in SSL, HTTP headers, and script security before attackers do.
                             </motion.p>
@@ -160,7 +203,7 @@ const Scan = () => {
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: 1.5, duration: 0.5 }}
                                 onSubmit={handleScan}
-                                className="w-full flex"
+                                className="w-full max-w-2xl flex" // Central form
                             >
                                 <input
                                     type="text"
@@ -186,17 +229,38 @@ const Scan = () => {
                                 <FeatureCard icon={<VpnKeyOutlinedIcon className="text-indigo-400" />} title="Script Auditing" delay={2.0} />
                             </div>
 
-                            {results.map((item, index) => (
-                                <li key={index} className="bg-white/5 p-4 rounded-lg border border-white/20">
-                                    <p className="text-indigo-300 font-semibold">⚠️ {item.alert}</p>
-                                    <p className="text-gray-200 text-sm mt-1">Risk: {item.risk}</p>
-                                    <p className="text-gray-300 text-sm mt-2">
-                                        <strong>Explanation:</strong> {item.explanation}
-                                    </p>
-                                </li>
-                            ))}
-
-
+                            {/* MODIFICATION: Scan results in a horizontal, scrollable card layout */}
+                            {scanMessage && (
+                                <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8 text-center text-gray-300">
+                                    {scanMessage}
+                                </motion.p>
+                            )}
+                            {results && results.length > 0 && (
+                                <div className="w-full max-w-4xl mt-8">
+                                    <h2 className="text-2xl font-bold mb-4 text-left">Vulnerabilities Found</h2>
+                                    <div className="flex gap-4 overflow-x-auto pb-4">
+                                        {results.map((item, index) => (
+                                            <motion.div
+                                                key={index}
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                                                className="bg-white/5 p-4 rounded-lg border border-white/20 flex-shrink-0 w-[320px]" // Card styling
+                                            >
+                                                <p className="text-indigo-300 font-semibold flex items-center gap-2">
+                                                    ⚠️ {item.alert}
+                                                </p>
+                                                <p className="text-gray-200 text-sm mt-2 font-mono bg-black/20 px-2 py-1 rounded">
+                                                    Risk: <span className="font-bold">{item.risk}</span>
+                                                </p>
+                                                <p className="text-gray-300 text-sm mt-3">
+                                                    <strong>Explanation:</strong> {item.explanation}
+                                                </p>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </motion.div>
                     )}
                 </AnimatePresence>
