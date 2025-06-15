@@ -81,7 +81,7 @@ const Scan = () => {
             setScanMessage(message || "Scan complete.");
         } catch (err) {
             console.error("❌ Scan error:", err.response?.data || err.message);
-            alert("Error during scan: " + (err.response?.data?.error || err.message));
+            alert("Zap (Zed Attack Proxy) failed to scan the URL because its not installed on your system.");
         } finally {
             setIsLoading(false);
             setUrl('');
