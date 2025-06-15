@@ -34,6 +34,7 @@ SecureWeb AI is a full-stack AI-powered web vulnerability scanner built using th
 
 ### 🔧 Backend Setup
 
+```bash
 cd Backend
 npm install
 
