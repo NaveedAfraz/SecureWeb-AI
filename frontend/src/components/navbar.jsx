@@ -12,10 +12,30 @@ const Navbar = () => {
     });
     console.log(userId);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        try {
+            const res = await fetch('http://localhost:5000/api/auth/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${userId}`
+                },
+                credentials: 'include'
+            })
+            console.log(res);
+
+            if (res.ok) {
+                localStorage.removeItem("token");
+                setUserId(null);
+                navigate('/home');
+            }
+        } catch (error) {
+            console.log(error);
+
+        }
         localStorage.removeItem("token");
         setUserId(null);
-        navigate('/login');
+        navigate('/home');
     };
 
     useEffect(() => {
@@ -55,7 +75,7 @@ const Navbar = () => {
 
                                 {userId ? (
                                     <>
-                                                                              <motion.button
+                                        <motion.button
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
                                             onClick={handleLogout}
