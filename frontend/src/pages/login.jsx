@@ -39,7 +39,7 @@ const LoginPage = () => {
             }
         } catch (error) {
             console.error('Login error:', error);
-            setError('Network error or server unavailable.');
+            setError(error.response.data?.message || 'Login failed');
         }
     };
 
