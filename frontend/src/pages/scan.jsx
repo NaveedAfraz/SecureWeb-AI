@@ -9,10 +9,10 @@ import Navbar from '@/components/navbar';
 import { useLocation } from 'react-router-dom';
 import Footer from '@/components/footer';
 import axios from 'axios';
-// Animated background component
 
+// Animated background component
 const AnimatedGradientBackground = () => (
-    <div className="absolute inset-0 -z-10 overflow-hidden bg-gray-900">
+    <div className="absolute inset-0 -z-20 overflow-hidden bg-gray-900">
         <motion.div
             className="absolute h-[50rem] w-[50rem] bg-gradient-to-r from-indigo-500/40 via-purple-500/30 to-pink-500/40"
             style={{ borderRadius: '50%' }}
@@ -49,7 +49,7 @@ const FeatureCard = ({ icon, title, delay }) => (
 const Scan = () => {
     const [url, setUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [results, setResults] = useState([]);           // ✅ moved inside
+    const [results, setResults] = useState([]);
     const [scanMessage, setScanMessage] = useState("");
 
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -108,7 +108,7 @@ const Scan = () => {
     return (
         <>
             <Navbar />
-            <div className="relative min-h-screen w-full flex flex-col items-center justify-center p-4 overflow-hidden font-sans text-white">
+            <div className="relative min-h-screen w-full flex flex-col items-center justify-center p-4 font-sans text-white mt-17">
                 <AnimatedGradientBackground />
                 <AnimatePresence>
                     {isLoading ? (
@@ -129,30 +129,32 @@ const Scan = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.5 }}
-                            className="w-full max-w-2xl flex flex-col items-center text-center"
+                            className="w-full flex flex-col items-center text-center px-4"
                         >
                             {/* --- Headline --- */}
-                            <motion.h1
-                                variants={titleVariants}
-                                initial="hidden"
-                                animate="visible"
-                                className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4"
-                            >
-                                {title.split("").map((char, index) => (
-                                    <motion.span key={index} variants={letterVariant}>
-                                        {char}
-                                    </motion.span>
-                                ))}
-                            </motion.h1>
+                            <div className="w-full max-w-2xl">
+                                <motion.h1
+                                    variants={titleVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                    className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4"
+                                >
+                                    {title.split("").map((char, index) => (
+                                        <motion.span key={index} variants={letterVariant}>
+                                            {char}
+                                        </motion.span>
+                                    ))}
+                                </motion.h1>
 
-                            <motion.p
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 1.2, duration: 0.5 }}
-                                className="text-lg text-gray-300 mb-8 max-w-xl"
-                            >
-                                Uncover vulnerabilities in SSL, HTTP headers, and script security before attackers do.
-                            </motion.p>
+                                <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 1.2, duration: 0.5 }}
+                                    className="text-lg text-gray-300 mb-8 max-w-xl mx-auto"
+                                >
+                                    Uncover vulnerabilities in SSL, HTTP headers, and script security before attackers do.
+                                </motion.p>
+                            </div>
 
                             {/* --- Input Form --- */}
                             <motion.form
@@ -160,7 +162,7 @@ const Scan = () => {
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: 1.5, duration: 0.5 }}
                                 onSubmit={handleScan}
-                                className="w-full flex"
+                                className="w-full max-w-2xl flex"
                             >
                                 <input
                                     type="text"
@@ -180,27 +182,39 @@ const Scan = () => {
                             </motion.form>
 
                             {/* --- Feature Highlights --- */}
-                            <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-xl">
+                            <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
                                 <FeatureCard icon={<ShieldOutlinedIcon className="text-indigo-400" />} title="SSL Analysis" delay={1.8} />
                                 <FeatureCard icon={<HttpOutlinedIcon className="text-indigo-400" />} title="Header Checks" delay={1.9} />
                                 <FeatureCard icon={<VpnKeyOutlinedIcon className="text-indigo-400" />} title="Script Auditing" delay={2.0} />
                             </div>
 
-                            {results.map((item, index) => (
-                                <li key={index} className="bg-white/5 p-4 rounded-lg border border-white/20">
-                                    <p className="text-indigo-300 font-semibold">⚠️ {item.alert}</p>
-                                    <p className="text-gray-200 text-sm mt-1">Risk: {item.risk}</p>
-                                    <p className="text-gray-300 text-sm mt-2">
-                                        <strong>Explanation:</strong> {item.explanation}
-                                    </p>
-                                </li>
-                            ))}
-
-
+                            {/* --- Scan Results Display --- */}
+                            {results.length > 0 && (
+                                <div className="w-full max-w-2xl z-1000 mx-auto mt-10">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+                                        {results.map((item, index) => (
+                                            <div
+                                                key={index}
+                                                className="bg-white/5 p-6 rounded-lg border border-white/20 w-[300px] h-[400px] flex flex-col text-left overflow-hidden"
+                                            >
+                                                <div className="flex-shrink-0">
+                                                    <p className="text-indigo-300 font-semibold text-lg truncate" title={item.alert}>⚠️ {item.alert}</p>
+                                                    <p className="text-gray-200 text-sm mt-1">Risk: {item.risk}</p>
+                                                </div>
+                                                <div className="mt-4">
+                                                    <p className="text-gray-300 text-sm">
+                                                        <strong>Explanation:</strong>
+                                                        <span className="block mt-1">{item.explanation}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </motion.div>
                     )}
                 </AnimatePresence>
-
             </div>
             <Footer />
         </>

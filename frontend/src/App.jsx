@@ -25,7 +25,8 @@ function App() {
           withCredentials: true
         });
         console.log("User authenticated:", res.data.user);
-        setUser(res.data.user); // Optional: Save user to state/context
+        const userId=res.data.user.id;
+        localStorage.setItem('jwtToken') // Optional: Save user to state/context
       } catch (err) {
         console.log("Not logged in or session expired");
         setUser(null);

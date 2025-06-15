@@ -4,9 +4,12 @@ import App from './App.jsx'
 import './App.css'
 import { Toaster } from "@/components/ui/sonner";
 import { BrowserRouter } from 'react-router';
+import { AuthProvider } from './context/AuthContext';
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
-    <App />
-    <Toaster />
- </BrowserRouter>
+    <AuthProvider>
+      <App />
+      <Toaster />
+    </AuthProvider>
+  </BrowserRouter>
 )
