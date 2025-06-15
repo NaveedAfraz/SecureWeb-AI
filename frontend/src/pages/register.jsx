@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '@/components/navbar';
 
-const API_URL = import.meta.env.VITE_API_URL;
+ 
 
 const RegisterPage = () => {
     const [username, setUsername] = useState('');
@@ -20,7 +20,7 @@ const RegisterPage = () => {
 
         try {
             const response = await axios.post(
-                `${API_URL}/api/auth/register`,
+                `${import.meta.env.VITE_API_URL}/api/auth/register`,
                 { username, password }, // ✅ body directly
                 { withCredentials: true } // ✅ only in options
             );
@@ -30,7 +30,7 @@ const RegisterPage = () => {
             if (response.ok) {
                 setMessage(data.message || 'Registration successful! Redirecting to login...');
 
-                const loginResponse = await fetch(`${API_URL}/api/login`, {
+                const loginResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password }),
@@ -39,7 +39,7 @@ const RegisterPage = () => {
                 const loginData = await loginResponse.json();
 
                 if (loginResponse.ok) {
-                    onLoginSuccess(loginData.token, loginData.username);
+                    navigate('/home');
                 } else {
                     setError(loginData.message || 'Login failed after registration. Please log in manually.');
                     navigate('/login');
