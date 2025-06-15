@@ -21,7 +21,7 @@ function App() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get(`https://secureweb-ai.onrender.com/api/auth/check`, {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/check`, {
           withCredentials: true
         });
         console.log("User authenticated:", res.data.user);

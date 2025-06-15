@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Check auth status when app loads
-    axios.get('https://secureweb-ai.onrender.com/api/auth/check', {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/auth/check`, {
       withCredentials: true,
     }).then(res => {
       setUser(res.data.user); // user is authenticated

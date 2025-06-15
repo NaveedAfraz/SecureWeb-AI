@@ -10,7 +10,7 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const API_URL = import.meta.env.VITE_API_URL || "https://secureweb-ai.onrender.com";
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
