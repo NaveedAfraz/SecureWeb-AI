@@ -10,16 +10,11 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 const app = express();
 connectDB();
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "https://secure-web-ai.vercel.app",
-    ], // allow both ports
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: 'https://secure-web-ai.vercel.app',
+  credentials: true,       
+}));
+
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/zap", zapRoutes);
