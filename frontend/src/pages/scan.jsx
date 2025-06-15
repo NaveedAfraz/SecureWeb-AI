@@ -64,7 +64,7 @@ const Scan = () => {
         setScanMessage('');
 
         try {
-            const token = localStorage.getItem("jwtToken");
+            const token = localStorage.getItem("token");
 
             const response = await axios.post(`${API_URL}/api/zap/report`,
                 { url },

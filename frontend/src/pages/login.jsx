@@ -30,7 +30,7 @@ const LoginPage = () => {
                 const { token } = response.data;
 
                 // Save token to localStorage
-                localStorage.setItem('jwtToken', token);
+                localStorage.setItem('token', token);
 
 
                 navigate('/home');
@@ -45,7 +45,7 @@ const LoginPage = () => {
 
 
     const handleLogout = () => {
-        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('token');
         setToken(null);
         setUser(null);
         navigate('/login'); // Redirect to login page

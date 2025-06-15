@@ -14,7 +14,7 @@ function App() {
     throw new Error('VITE_CLERK_PUBLISHABLE_KEY is not defined')
   }
 
-  const [token, setToken] = useState(localStorage.getItem('jwtToken'));
+  
   const [user, setUser] = useState(null);
 
   // App.jsx or useAuth.js
@@ -25,8 +25,8 @@ function App() {
           withCredentials: true
         });
         console.log("User authenticated:", res.data.user);
-        const userId=res.data.user.id;
-        localStorage.setItem('jwtToken') // Optional: Save user to state/context
+        const userId = res.data.user.id;
+        localStorage.setItem("token", userId) // Optional: Save user to state/context
       } catch (err) {
         console.log("Not logged in or session expired");
         setUser(null);
@@ -52,15 +52,15 @@ function App() {
   };
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('jwtToken');
+    const storedToken = localStorage.getItem('token');
     if (storedToken) {
       const decodedUser = decodeJwt(storedToken);
       if (decodedUser && decodedUser.exp * 1000 > Date.now()) {
-        setToken(storedToken);
+        
         setUser(decodedUser);
       } else {
-        localStorage.removeItem('jwtToken');
-        setToken(null);
+        localStorage.removeItem("token");
+      
         setUser(null);
       }
     }
