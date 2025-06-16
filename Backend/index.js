@@ -10,24 +10,17 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 const app = express();
 connectDB();
-// app.use(cors({
-//   origin: 'https://secure-web-ai.vercel.app',
-//   credentials: true,       
-// }));
+
 app.use(cookieParser());
 const corsOptions = {
-  origin: 'https://secure-web-ai.vercel.app', // Your frontend URL
-  credentials: true, // Allows cookies and authorization headers
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Explicitly allow methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Explicitly allow headers
+  origin: ["https://secure-web-ai.vercel.app", "http://localhost:5173"],
+  credentials: true,
 };
-app.options('*', cors(corsOptions));
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/zap", zapRoutes);
 app.use("/api/zap", zapReportRoutes);
-
 
 app.get("/", (req, res) => res.send("Server is running!"));
 
